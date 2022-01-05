@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <title>Lista de Tarefas</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="card mt-5">
+            <div class="card-header text-center">
+                <h3>Lista de Tarefas</h3>
+            </div>
+            <div class="card-body">
+                <div class="col">
+                    <div class="row">
+                        <div class="text-center w-100">
+
+                            <a href="/novaTarefa" class="btn btn-warning text-white">
+                                <i class="fas fa-plus"></i> Nova Tarefa
+                            </a>
+
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-center w-100">
+
+                            <table class="table">
+                                <thead>
+                                    <th>Marcar</th>
+                                    <th translate="no">ID</th>
+                                    <th>Titulo</th>
+                                    <th>Descrição</th>
+                                    <th>Status</th>
+                                    <th>Prioridade</th>
+                                    <th>Operações</th>
+                                </thead>
+                                <tbody>
+
+                                    <% tarefas.forEach(tarefa => { %>
+
+                                        <tr>
+                                            <td>
+
+                                                <% if(tarefa.status == 3){ %>
+
+                                                    <input type="checkbox" class="itemExcluir" data-id="<%= tarefa.id %>" value="1" checked>
+
+                                                    <%}else{%>
+
+                                                        <input type="checkbox" class="itemExcluir" data-id="<%= tarefa.id %>" value="0">
+
+                                                        <%}%>
+
+                                            </td>
+                                            <td>
+                                                <%= tarefa.id %>
+                                            </td>
+                                            <td>
+                                                <%= tarefa.titulo.substring(0,20) %>
+                                            </td>
+                                            <td>
+                                                <%= tarefa.descricao.substring(0,20) %>
+                                            </td>
+                                            <td id="campoStatus<%=tarefa.id%>">
+                                                <% if(tarefa.status == 1){  %>
+                                                    Pendente
+                                                    <% }else if(tarefa.status == 2){%>
+
+                                                        Em execução
+
+                                                        <% }else{%>
+
+                                                            Concluida
+
+                                                            <% }%>
+                                            </td>
+                                            <td translate="no">
+                                                <% if(tarefa.prioridade == 1){  %>
+
+                                                    Baixa
+
+                                                    <% }else if(tarefa.prioridade == 2){%>
+
+                                                        Média
+
+                                                        <% }else{%>
+
+                                                            Alta
+
+                                                            <% }%>
+                                            </td>
+                                            <td>
+
+                                                <a href="/editarTarefa/<%= tarefa.id %>" class="btn btn-success">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </a>
+
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluir<%= tarefa.id %>">
+                                                    <i class="fas fa-trash"></i>
+                                                    Excluir
+                                                </button>
+
+                                                <!-- The Modal -->
+                                                <div class="modal" id="excluir<%= tarefa.id %>">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Excluir tarefa da lista</h4>
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+
+                                                            <!-- Modal body -->
+                                                            <div class="modal-body">
+                                                                Deseja excluir a tarefa:
+                                                                <%= tarefa.titulo %>
+                                                            </div>
+
+                                                            <!-- Modal footer -->
+                                                            <div class="modal-footer">
+                                                                <form action="/deletaTarefa" method="post">
+                                                                    <input type="hidden" name="id" value="<%= tarefa.id %>">
+                                                                    <button type="submit" class="btn btn-success">Sim</button>
+
+                                                                </form>
+                                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                        <% }) %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
